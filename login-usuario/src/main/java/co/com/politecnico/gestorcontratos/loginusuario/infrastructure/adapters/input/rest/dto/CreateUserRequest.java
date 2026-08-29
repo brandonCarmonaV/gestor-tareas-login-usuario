@@ -3,4 +3,4 @@ package co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.
 import jakarta.validation.Valid;
 
 @Valid
-public record CreateUserRequest(String id, String name, String pass) {}
+public record CreateUserRequest(String name, String pass) {}

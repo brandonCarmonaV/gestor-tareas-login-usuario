@@ -16,5 +16,5 @@ public class UserEntity {
     @Id
     private String id;
     private String name;
-    private String pass;
+    private String passwordHash;
 }

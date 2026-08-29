@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.UserServicePort;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.dto.CreateUserCommand;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.dto.UserDTO;
+import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.IdGeneratorPort;
+import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.PasswordHasherPort;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.UserPersistencePort;
 import co.com.politecnico.gestorcontratos.loginusuario.domain.exception.UserNotFoundException;
 import co.com.politecnico.gestorcontratos.loginusuario.domain.model.User;
@@ -16,14 +18,22 @@ import co.com.politecnico.gestorcontratos.loginusuario.domain.model.User;
 public class UserService implements UserServicePort {
 
     private final UserPersistencePort persistence;
+    private final IdGeneratorPort idGenerator;
+    private final PasswordHasherPort passwordHasher;
 
-    public UserService(UserPersistencePort persistence) {
+    public UserService(UserPersistencePort persistence, IdGeneratorPort idGenerator,
+            PasswordHasherPort passwordHasher) {
         this.persistence = persistence;
+        this.idGenerator = idGenerator;
+        this.passwordHasher = passwordHasher;
     }
 
     @Override
     public UserDTO createUser(CreateUserCommand command) {
-        User toSave = new User(command.id(), command.name(), command.pass());
+        String id = idGenerator.generate();
+        String hashedPassword = passwordHasher.hash(command.pass());
+
+        User toSave = new User(id, command.name(), hashedPassword);
         User saved = persistence.save(toSave);
         return UserDTO.fromDomain(saved);
     }
