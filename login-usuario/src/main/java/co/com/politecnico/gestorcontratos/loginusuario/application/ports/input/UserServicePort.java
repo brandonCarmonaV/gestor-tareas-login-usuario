@@ -8,5 +8,7 @@ import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.d
 public interface UserServicePort {
     UserDTO createUser(CreateUserCommand command);
     UserDTO getById(String id);
+    UserDTO getByEmail(String email);
     List<UserDTO> listAll();
+    boolean matches(String raw, String hashed);
 }

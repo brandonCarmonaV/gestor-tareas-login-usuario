@@ -11,7 +11,7 @@ public class UserPersistenceMapper {
         if (entity == null) {
             return null;
         }
-        return new User(entity.getId(), entity.getName(), entity.getPasswordHash());
+        return new User(entity.getId(), entity.getEmail(), entity.getName(), entity.getPasswordHash());
     }
 
     public static UserEntity toEntity(User domain) {
@@ -20,6 +20,7 @@ public class UserPersistenceMapper {
         }
         UserEntity entity = new UserEntity();
         entity.setId(domain.getId());
+        entity.setEmail(domain.getEmail());
         entity.setName(domain.getName());
         entity.setPasswordHash(domain.getPass());
         return entity;

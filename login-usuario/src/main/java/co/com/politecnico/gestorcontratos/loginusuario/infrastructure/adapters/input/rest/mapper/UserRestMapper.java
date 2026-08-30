@@ -11,6 +11,6 @@ public class UserRestMapper {
         if (request == null) {
             return null;
         }
-        return new CreateUserCommand(request.name(), request.pass());
+        return new CreateUserCommand(request.name(), request.email(), request.pass());
     }
 }

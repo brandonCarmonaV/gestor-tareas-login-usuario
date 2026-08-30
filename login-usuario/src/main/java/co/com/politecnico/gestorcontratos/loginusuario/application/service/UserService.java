@@ -33,7 +33,7 @@ public class UserService implements UserServicePort {
         String id = idGenerator.generate();
         String hashedPassword = passwordHasher.hash(command.pass());
 
-        User toSave = new User(id, command.name(), hashedPassword);
+        User toSave = new User(id, command.email(), command.name(), hashedPassword);
         User saved = persistence.save(toSave);
         return UserDTO.fromDomain(saved);
     }
@@ -45,8 +45,19 @@ public class UserService implements UserServicePort {
     }
 
     @Override
+    public UserDTO getByEmail(String email) {
+        User user = persistence.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+        return UserDTO.fromDomain(user);
+    }
+
+    @Override
     public List<UserDTO> listAll() {
         List<User> users = persistence.findAll();
         return users.stream().map(UserDTO::fromDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean matches(String raw, String hashed) {
+        return passwordHasher.matches(raw, hashed);
     }
 }

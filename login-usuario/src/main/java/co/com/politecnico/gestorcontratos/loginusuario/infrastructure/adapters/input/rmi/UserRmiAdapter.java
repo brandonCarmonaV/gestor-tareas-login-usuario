@@ -22,12 +22,12 @@ public class UserRmiAdapter extends UnicastRemoteObject implements UserRmiPort {
 
     @Override
     public boolean login(RmiLoginRequest request) throws RemoteException {
-        UserDTO userDto = userService.getById(request.getName());
+        UserDTO userDto = userService.getByEmail(request.getEmail());
 
         if (userDto == null) {
             return false;
         }
-        return userDto.id().equals(request.getName())
-            && userDto.pass().equals(request.getPass());
+        return userDto.email().equals(request.getEmail())
+            && userService.matches(request.getPass(), userDto.pass());
     }
 }
