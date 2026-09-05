@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Bean;
 
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.JWTServicePort;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.UserServicePort;
-import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.UserRmiPort;
-import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rmi.UserRmiAdapter;
+import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.AuthRmiPort;
+import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rmi.AuthRmiAdapter;
 
 @SpringBootApplication
 public class LoginUsuarioApplication {
@@ -22,12 +22,12 @@ public class LoginUsuarioApplication {
     }
 
     @Bean
-    public UserRmiPort userRmiPort(UserServicePort userService, JWTServicePort jwtService) throws RemoteException {
-        return new UserRmiAdapter(userService, jwtService);
+    public AuthRmiPort userRmiPort(UserServicePort userService, JWTServicePort jwtService) throws RemoteException {
+        return new AuthRmiAdapter(userService, jwtService);
     }
 
     @Bean
-    public ApplicationRunner registerRmi(UserRmiPort userRmiPort) {
+    public ApplicationRunner registerRmi(AuthRmiPort userRmiPort) {
         return args -> {
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.rebind("LoginService", userRmiPort);

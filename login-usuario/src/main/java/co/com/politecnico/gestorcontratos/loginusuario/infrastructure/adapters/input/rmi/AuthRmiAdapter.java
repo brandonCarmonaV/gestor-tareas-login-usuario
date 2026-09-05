@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.JWTServicePort;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.UserServicePort;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.dto.UserDTO;
-import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.UserRmiPort;
+import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.AuthRmiPort;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rmi.dto.RmiLoginRequest;
 
 @Component
-public class UserRmiAdapter extends UnicastRemoteObject implements UserRmiPort {
+public class AuthRmiAdapter extends UnicastRemoteObject implements AuthRmiPort {
 
     private final UserServicePort userService;
     private final JWTServicePort jwtService;
 
-    public UserRmiAdapter(UserServicePort userService, JWTServicePort jwtService) throws RemoteException {
+    public AuthRmiAdapter(UserServicePort userService, JWTServicePort jwtService) throws RemoteException {
         super();
         this.userService = userService;
         this.jwtService = jwtService;
@@ -40,5 +40,25 @@ public class UserRmiAdapter extends UnicastRemoteObject implements UserRmiPort {
                     "tokenType", "Bearer");
         }
         return null;
+    }
+
+    @Override
+    public String extractSubject(String token) throws RemoteException {
+        return jwtService.extractSubject(token);
+    }
+
+    @Override
+    public boolean isAccessTokenValid(String token) throws RemoteException {
+        return jwtService.isAccessTokenValid(token);
+    }
+
+    @Override
+    public boolean isRefreshTokenValid(String token) throws RemoteException {
+        return jwtService.isAccessTokenValid(token);
+    }
+
+    @Override
+    public String generateRefreshToken(String userId) throws RemoteException {
+        return jwtService.generateRefreshToken(userId);
     }
 }
