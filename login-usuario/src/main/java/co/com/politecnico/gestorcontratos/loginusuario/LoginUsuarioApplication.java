@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.JWTServicePort;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.UserServicePort;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.UserRmiPort;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rmi.UserRmiAdapter;
@@ -21,8 +22,8 @@ public class LoginUsuarioApplication {
     }
 
     @Bean
-    public UserRmiPort userRmiPort(UserServicePort userService) throws RemoteException {
-        return new UserRmiAdapter(userService);
+    public UserRmiPort userRmiPort(UserServicePort userService, JWTServicePort jwtService) throws RemoteException {
+        return new UserRmiAdapter(userService, jwtService);
     }
 
     @Bean
