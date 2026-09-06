@@ -4,22 +4,25 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+
+import rmi.shared.AuthRmiPort;
+import rmi.shared.RmiLoginRequest;
 
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.JWTServicePort;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.UserServicePort;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.dto.UserDTO;
-import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.AuthRmiPort;
-import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rmi.dto.RmiLoginRequest;
 
-@Component
 public class AuthRmiAdapter extends UnicastRemoteObject implements AuthRmiPort {
 
     private final UserServicePort userService;
     private final JWTServicePort jwtService;
 
+    @Value("${rmi.registry-port}")
+    private static int port;
+
     public AuthRmiAdapter(UserServicePort userService, JWTServicePort jwtService) throws RemoteException {
-        super();
+        super(port);
         this.userService = userService;
         this.jwtService = jwtService;
     }

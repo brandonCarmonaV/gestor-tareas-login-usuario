@@ -2,9 +2,10 @@ package co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.
 
 import org.springframework.web.bind.annotation.RestController;
 
-import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.AuthRmiPort;
+import rmi.shared.AuthRmiPort;
+import rmi.shared.RmiLoginRequest;
+
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.LoginRequest;
-import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rmi.dto.RmiLoginRequest;
 import jakarta.validation.Valid;
 
 import java.rmi.registry.LocateRegistry;
@@ -25,7 +26,7 @@ public class LoginRestRmiAdapter {
             String server = "localhost";
 
             Registry registry = LocateRegistry.getRegistry(server, 1099);
-            AuthRmiPort authPort = (AuthRmiPort) registry.lookup("LoginService");
+            AuthRmiPort authPort = (AuthRmiPort) registry.lookup("AuthService");
             Map<String, String> userMap = authPort.auth(new RmiLoginRequest(request.email(), request.pass()));
 
             if (userMap != null) {
