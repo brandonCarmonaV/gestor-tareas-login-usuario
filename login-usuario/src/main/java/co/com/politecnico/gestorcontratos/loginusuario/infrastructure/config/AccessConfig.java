@@ -13,8 +13,9 @@ public class AccessConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
-                        .allowedMethods("*");
+                        .allowedOrigins("http://localhost:3000")
+                        .allowedMethods("*")
+                        .allowCredentials(true);
             }
         };
     }

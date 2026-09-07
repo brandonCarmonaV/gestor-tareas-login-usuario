@@ -12,6 +12,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Map;
 
+import java.time.Duration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +33,30 @@ public class LoginRestRmiAdapter {
             Map<String, String> userMap = authPort.auth(new RmiLoginRequest(request.email(), request.pass()));
 
             if (userMap != null) {
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(userMap);
+                ResponseCookie accessCookie = ResponseCookie.from(
+                        "access_token",
+                        userMap.get("accessToken"))
+                        .httpOnly(true)
+                        .secure(false)
+                        .sameSite("Lax")
+                        .path("/")
+                        .maxAge(Duration.ofMinutes(15))
+                        .build();
+
+                ResponseCookie refreshCookie = ResponseCookie.from(
+                        "refresh_token",
+                        userMap.get("refreshToken"))
+                        .httpOnly(true)
+                        .secure(false)
+                        .sameSite("Lax")
+                        .path("/")
+                        .maxAge(Duration.ofDays(7))
+                        .build();
+
+                return ResponseEntity.status(HttpStatus.ACCEPTED)
+                        .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                        .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                        .body(Map.of("message", "Authenticated"));
             }
         } catch (Exception e) {
             e.printStackTrace();

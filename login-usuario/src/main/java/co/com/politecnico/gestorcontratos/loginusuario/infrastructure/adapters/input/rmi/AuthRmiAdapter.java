@@ -46,8 +46,9 @@ public class AuthRmiAdapter extends UnicastRemoteObject implements AuthRmiPort {
     }
 
     @Override
-    public String extractSubject(String token) throws RemoteException {
-        return jwtService.extractSubject(token);
+    public Map<String, String> extractSubject(String token) throws RemoteException {
+        UserDTO user = userService.getById(jwtService.extractSubject(token));
+        return Map.of("name", user.name(), "email", user.email());
     }
 
     @Override
