@@ -7,6 +7,7 @@ import co.com.politecnico.gestorcontratos.loginusuario.domain.model.User;
 
 public interface UserPersistencePort {
     User save(User user);
+    void deleteById(String id);
     Optional<User> findById(String id);
     Optional<User> findByEmail(String email);
     List<User> findAll();

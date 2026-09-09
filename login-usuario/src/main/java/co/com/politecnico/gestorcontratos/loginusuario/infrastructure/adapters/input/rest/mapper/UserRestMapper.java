@@ -3,7 +3,9 @@ package co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.
 import org.springframework.stereotype.Component;
 
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.dto.CreateUserCommand;
+import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.dto.UpdateUserCommand;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.CreateUserRequest;
+import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.UpdateUserRequest;
 
 @Component
 public class UserRestMapper {
@@ -12,5 +14,12 @@ public class UserRestMapper {
             return null;
         }
         return new CreateUserCommand(request.name(), request.email(), request.pass());
+    }
+
+    public UpdateUserCommand toCommand(UpdateUserRequest request) {
+        if (request == null) {
+            return null;
+        }
+        return new UpdateUserCommand(request.name(), request.email(), request.pass());
     }
 }

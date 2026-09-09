@@ -29,6 +29,11 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     }
 
     @Override
+    public void deleteById(String id) {
+        repository.deleteById(id);
+    }
+
+    @Override
     public Optional<User> findById(String id) {
         Optional<UserEntity> entityOptional = repository.findById(id);
         return entityOptional.map(UserPersistenceMapper::toDomain);
