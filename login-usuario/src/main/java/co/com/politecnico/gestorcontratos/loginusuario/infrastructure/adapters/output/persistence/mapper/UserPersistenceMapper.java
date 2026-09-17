@@ -3,6 +3,7 @@ package co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.
 import org.springframework.stereotype.Component;
 
 import co.com.politecnico.gestorcontratos.loginusuario.domain.model.User;
+import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.output.persistence.entity.Rol;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.output.persistence.entity.UserEntity;
 
 @Component
@@ -11,7 +12,7 @@ public class UserPersistenceMapper {
         if (entity == null) {
             return null;
         }
-        return new User(entity.getId(), entity.getEmail(), entity.getName(), entity.getPasswordHash());
+        return new User(entity.getId(), entity.getRol(), entity.getEmail(), entity.getName(), entity.getPasswordHash());
     }
 
     public static UserEntity toEntity(User domain) {
@@ -22,6 +23,7 @@ public class UserPersistenceMapper {
         entity.setId(domain.getId());
         entity.setEmail(domain.getEmail());
         entity.setName(domain.getName());
+        entity.setRol(Rol.ROLE_USER);
         entity.setPasswordHash(domain.getPass());
         return entity;
     }

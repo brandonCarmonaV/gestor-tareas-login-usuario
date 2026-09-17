@@ -6,6 +6,9 @@ import rmi.shared.AuthRmiPort;
 import rmi.shared.RmiLoginRequest;
 
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.LoginRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import java.rmi.registry.LocateRegistry;
@@ -19,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 public class LoginRestRmiAdapter {
@@ -40,7 +44,7 @@ public class LoginRestRmiAdapter {
                         .secure(false)
                         .sameSite("Lax")
                         .path("/")
-                        .maxAge(Duration.ofMinutes(15))
+                        .maxAge(Duration.ofHours(5))
                         .build();
 
                 ResponseCookie refreshCookie = ResponseCookie.from(
@@ -63,4 +67,24 @@ public class LoginRestRmiAdapter {
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Map.of("message", "Access denied"));
     }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> deleteCookies(
+            HttpServletRequest request,
+            HttpServletResponse response) {
+
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                Cookie cookieDel = new Cookie(cookie.getName(), "");
+                cookieDel.setPath("/");
+                cookieDel.setMaxAge(0);
+                response.addCookie(cookieDel);
+            }
+        }
+
+        return ResponseEntity.ok("Cookies deleted.");
+    }
+    
 }
