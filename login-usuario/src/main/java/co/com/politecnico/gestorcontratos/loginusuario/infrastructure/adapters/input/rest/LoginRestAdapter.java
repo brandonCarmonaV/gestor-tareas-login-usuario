@@ -2,17 +2,13 @@ package co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.
 
 import org.springframework.web.bind.annotation.RestController;
 
-import rmi.shared.AuthRmiPort;
-import rmi.shared.RmiLoginRequest;
-
+import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.AuthServicePort;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.LoginRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.Map;
 
 import java.time.Duration;
@@ -23,19 +19,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
-public class LoginRestRmiAdapter {
+public class LoginRestAdapter {
+
+    private final AuthServicePort authService;
+
+    public LoginRestAdapter(AuthServicePort authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/auth")
     public ResponseEntity<Map<String, String>> auth(@Valid @RequestBody LoginRequest request) {
         try {
-            String server = "localhost";
-
-            Registry registry = LocateRegistry.getRegistry(server, 1099);
-            AuthRmiPort authPort = (AuthRmiPort) registry.lookup("AuthService");
-            Map<String, String> userMap = authPort.auth(new RmiLoginRequest(request.email(), request.pass()));
-
+            Map<String, String> userMap = authService.auth(new LoginRequest(request.email(), request.pass()));
             if (userMap != null) {
                 ResponseCookie accessCookie = ResponseCookie.from(
                         "access_token",
@@ -86,5 +85,9 @@ public class LoginRestRmiAdapter {
 
         return ResponseEntity.ok("Cookies deleted.");
     }
-    
+
+    @GetMapping("/extract")
+    public Map<String,String> extractUser(@RequestParam String token) {
+        return authService.extractSubject(token);
+    }
 }

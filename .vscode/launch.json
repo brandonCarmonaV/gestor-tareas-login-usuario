@@ -6,13 +6,6 @@
     "configurations": [
         {
             "type": "java",
-            "name": "RMIServer",
-            "request": "launch",
-            "mainClass": "co.com.politecnico.gestorcontratos.loginusuario.RMIServer",
-            "projectName": "login-usuario"
-        },
-        {
-            "type": "java",
             "name": "LoginUsuarioApplication",
             "request": "launch",
             "mainClass": "co.com.politecnico.gestorcontratos.loginusuario.LoginUsuarioApplication",

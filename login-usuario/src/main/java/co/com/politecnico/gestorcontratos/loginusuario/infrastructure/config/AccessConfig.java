@@ -13,8 +13,7 @@ public class AccessConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000", "http://localhost:3010",
-                                "http://localhost:3020", "http://localhost:3030")
+                        .allowedOriginPatterns("http://localhost:[*]")
                         .allowedMethods("*")
                         .allowCredentials(true);
             }
