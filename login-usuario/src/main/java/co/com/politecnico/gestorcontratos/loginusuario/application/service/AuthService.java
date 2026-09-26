@@ -41,9 +41,8 @@ public class AuthService implements AuthServicePort {
     }
 
     @Override
-    public Map<String, String> extractSubject(String token) {
-        UserDTO user = userService.getById(jwtService.extractSubject(token));
-        return Map.of("id", user.id(), "name", user.name(), "email", user.email());
+    public UserDTO extractSubject(String token) {
+        return userService.getById(jwtService.extractSubject(token));
     }
 
     @Override
