@@ -23,7 +23,7 @@ Incluye autenticación por correo y contraseña, encriptación de contraseñas c
 - PostgreSQL
 - JWT (jjwt)
 - Maven
-- Docker
+<!-- - Docker -->
 
 ## Características
 
@@ -38,11 +38,11 @@ Incluye autenticación por correo y contraseña, encriptación de contraseñas c
 
 ## Estructura del proyecto
 
+<!-- │   ├── dockerfile -->
 ```text
 gestor-tareas-login-usuario/
 ├── README.md
 ├── login-usuario/
-│   ├── dockerfile
 │   ├── mvnw
 │   ├── mvnw.cmd
 │   ├── pom.xml
@@ -62,7 +62,7 @@ Antes de ejecutar el proyecto asegúrate de tener instalado:
 - Java 21
 - Maven 3.9+
 - PostgreSQL (o una base de datos compatible configurada en variables de entorno)
-- Docker opcional para ejecución en contenedor
+<!-- - Docker opcional para ejecución en contenedor -->
 
 ## Configuración
 
@@ -103,12 +103,12 @@ La API quedará disponible en:
 http://localhost:8090
 ```
 
-## Ejecución con Docker
+<!-- ## Ejecución con Docker
 
 ```bash
 docker build -t login-usuario ./login-usuario
 docker run -p 8090:8090 --env DB_URL=jdbc:postgresql://host.docker.internal:5432/gestor_tareas --env DB_USERNAME=postgres --env DB_PASSWORD=tu_password login-usuario
-```
+``` -->
 
 ## Endpoints principales
 
