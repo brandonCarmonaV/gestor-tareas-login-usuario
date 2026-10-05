@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.AuthServicePort;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.UserServicePort;
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.dto.UserDTO;
+import co.com.politecnico.gestorcontratos.loginusuario.domain.exception.UserNotFoundException;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.CreateUserRequest;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.LoginRequest;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.UserResponse;
@@ -116,9 +117,17 @@ public class AuthRestAdapter {
     @PostMapping("/signup")
     public ResponseEntity<Map<String, String>> create(@RequestBody CreateUserRequest request) {
         var command = mapper.toCommand(request);
-        UserDTO userDto = userService.createUser(command);
 
+        try {
+            userService.getByEmail(command.email());
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Map.of("message", "User error"));
+        } catch (UserNotFoundException e) {
+            System.out.println("/signup: existing email validation pass");
+        }
+
+        UserDTO userDto = userService.createUser(command);
         return login(new LoginRequest(userDto.email(), request.pass()));
+
     }
 
     @GetMapping("/extract")
