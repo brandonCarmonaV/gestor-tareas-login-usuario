@@ -15,6 +15,7 @@ import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.
 import co.com.politecnico.gestorcontratos.loginusuario.application.ports.output.UserPersistencePort;
 import co.com.politecnico.gestorcontratos.loginusuario.domain.exception.UserNotFoundException;
 import co.com.politecnico.gestorcontratos.loginusuario.domain.model.User;
+import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.output.persistence.entity.Rol;
 
 @Service
 public class UserService implements UserServicePort {
@@ -37,7 +38,7 @@ public class UserService implements UserServicePort {
         String id = idGenerator.generate();
         String hashedPassword = passwordHasher.hash(command.pass());
 
-        User toSave = new User(id, command.email(), command.name(), hashedPassword);
+        User toSave = new User(id, Rol.ROLE_USER, command.email(), command.name(), hashedPassword);
         User saved = persistence.save(toSave);
         return UserDTO.fromDomain(saved);
     }
@@ -73,6 +74,7 @@ public class UserService implements UserServicePort {
 
         User updated = new User(
                 current.getId(),
+                current.getRol(),
                 command.email() == null ? current.getEmail() : command.email(),
                 command.name() == null ? current.getName() : command.name(),
                 password);

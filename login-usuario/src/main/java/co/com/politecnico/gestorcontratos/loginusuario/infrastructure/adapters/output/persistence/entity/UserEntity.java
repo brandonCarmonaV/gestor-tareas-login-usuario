@@ -19,4 +19,5 @@ public class UserEntity {
     private String email;
     private String name;
     private String passwordHash;
+    private Rol rol;
 }
