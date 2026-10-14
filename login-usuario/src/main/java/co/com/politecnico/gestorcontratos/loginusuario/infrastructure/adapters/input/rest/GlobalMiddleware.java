@@ -23,7 +23,8 @@ public class GlobalMiddleware implements HandlerInterceptor {
             "/extract",
             "/login",
             "/logout",
-            "/signup");
+            "/signup",
+            "/edit");
 
     public GlobalMiddleware(AuthServicePort authService) {
         this.authService = authService;
