@@ -8,6 +8,7 @@ import co.com.politecnico.gestorcontratos.loginusuario.application.ports.input.d
 import co.com.politecnico.gestorcontratos.loginusuario.domain.exception.UserNotFoundException;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.CreateUserRequest;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.LoginRequest;
+import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.UpdateUserRequest;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.dto.UserResponse;
 import co.com.politecnico.gestorcontratos.loginusuario.infrastructure.adapters.input.rest.mapper.UserRestMapper;
 import jakarta.servlet.http.Cookie;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
@@ -133,5 +135,12 @@ public class AuthRestAdapter {
     @GetMapping("/extract")
     public UserDTO extractUser(@RequestParam String token) {
         return authService.extractSubject(token);
+    }
+
+    @PatchMapping("/edit")
+    public UserResponse update(@CookieValue(name = "access_token", required = false) String token,
+            @RequestBody UpdateUserRequest request) {
+        UserDTO userDto = userService.updateUser(token, mapper.toCommand(request));
+        return UserResponse.fromDto(userDto);
     }
 }
