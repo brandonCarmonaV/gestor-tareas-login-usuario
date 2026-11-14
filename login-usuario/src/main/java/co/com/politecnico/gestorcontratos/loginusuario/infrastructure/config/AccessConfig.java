@@ -13,7 +13,7 @@ public class AccessConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns("http://localhost:[*]")
+                        .allowedOriginPatterns("http://localhost:*", "*gestortareas.dpdns.org*")
                         .allowedMethods("*")
                         .allowCredentials(true);
             }
