@@ -111,7 +111,7 @@ public class AuthRestAdapter {
 
         var response = UserResponse.fromDto(userDto);
 
-        return ResponseEntity.status(HttpStatus.FOUND).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("/signup")

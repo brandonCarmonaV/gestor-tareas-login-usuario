@@ -53,6 +53,12 @@ public class UserRestAdapter {
         return UserResponse.fromDto(userDto);
     }
 
+    @GetMapping("/email/{email}")
+    public UserResponse getByEmail(@PathVariable String email) {
+        UserDTO userDto = service.getByEmail(email);
+        return UserResponse.fromDto(userDto);
+    }
+
     @PatchMapping
     public UserResponse update(@CookieValue(name = "access_token", required = false) String token,
             @RequestBody UpdateUserRequest request) {
